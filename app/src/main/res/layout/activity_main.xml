@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loading"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_centerInParent="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/RLHome"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="match_parent"
@@ -50,14 +50,12 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:id="@+id/City"
                 android:layout_margin="10dp"
                 android:layout_weight="4.5"
                 android:background="@android:color/transparent"
                 android:hint="Enter City Name"
                 android:padding="5dp"
-                app:boxStrokeColor="@android:color/transparent"
                 app:hintTextColor="@color/white"
                 android:textColorHint="@color/white">
 
