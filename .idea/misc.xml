@@ -5,8 +5,8 @@
       <map>
         <entry key="..\:/Users/dbc/Desktop/Mevsim/app/src/main/res/drawable/card_back.xml" value="0.1945" />
         <entry key="..\:/Users/dbc/Desktop/Mevsim/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1945" />
-        <entry key="..\:/Users/dbc/Desktop/Mevsim/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/dbc/Desktop/Mevsim/app/src/main/res/layout/weather_item.xml" value="0.21" />
+        <entry key="..\:/Users/dbc/Desktop/Mevsim/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/dbc/Desktop/Mevsim/app/src/main/res/layout/weather_item.xml" value="0.5" />
       </map>
     </option>
   </component>

@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loading"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_centerInParent="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/RLHome"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="match_parent"
@@ -135,6 +135,7 @@
             android:id="@+id/RVWeathers"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
+            tools:listitem="@layout/weather_item"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 

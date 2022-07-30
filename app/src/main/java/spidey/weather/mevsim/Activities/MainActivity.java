@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import spidey.weather.mevsim.Adapters.WeatherAdapter;
 import spidey.weather.mevsim.Models.WeatherModel;
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         binding.searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String city = binding.editCity.getText().toString();
+                String city = Objects.requireNonNull(binding.editCity.getText()).toString();
                 if (city.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Enter A CityName", Toast.LENGTH_SHORT).show();
                 } else {
@@ -109,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                         Log.d("TAG","CITY NOT FOUND");
-                        Toast.makeText(this, "User City Not Found", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -123,47 +124,44 @@ public class MainActivity extends AppCompatActivity {
         String url = "http://api.weatherapi.com/v1/current.json?key=59fe756e53324ef7a99144310223007&q=" + cityName + "&aqi=no";
         binding.cityName.setText(cityName);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                binding.loading.setVisibility(View.GONE);
-                binding.RLHome.setVisibility(View.VISIBLE);
-                weatherModelArrayList.clear();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            binding.loading.setVisibility(View.GONE);
+            binding.RLHome.setVisibility(View.VISIBLE);
+            weatherModelArrayList.clear();
 
-                try {
-                    String temperature = response.getJSONObject("current").getString("temp_c");
-                    binding.temperature.setText(temperature + "°c");
-                    int  isDay = response.getJSONObject("current").getInt("is_day");
-                    String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
-                    String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
-                    Picasso.get().load("http:".concat(conditionIcon)).into(binding.iconWeather);
-                    binding.weatherCondition.setText(condition);
-                    if (isDay == 1){
-                        //morning
-                        Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6WJYkhfC8Ef02XujVgVSjSH6g7sZhx7hKbQ&usqp=CAU").into(binding.backGround);
-                    }else {
-                        //night
-                        Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3v_J2zb0iSh5yuOUYNByYc7XHCWExr5RX6g&usqp=CAU").into(binding.backGround);
-                    }
-
-                    JSONObject forecastObj = response.getJSONObject("forecast");
-                    JSONObject forecast0 = forecastObj.getJSONArray("forecastday").getJSONObject(0);
-                    JSONArray hourArray = forecast0.getJSONArray("hour");
-
-                    for (int i = 0; i<hourArray.length(); i++){
-                        JSONObject hourObj = hourArray.getJSONObject(i);
-                        String time = hourObj.getString("time");
-                        String temper = hourObj.getString("temp_c");
-                        String img = hourObj.getJSONObject("condition").getString("icon");
-                        String wind = hourObj.getString("wind_kph");
-                        weatherModelArrayList.add(new WeatherModel(time,temper,img,wind));
-                    }
-                    weatherAdapter.notifyDataSetChanged();
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            try {
+                String temper = response.getJSONObject("current").getString("temp_c");
+                binding.temperature.setText(temper + "°c");
+                int  isDay = response.getJSONObject("current").getInt("is_day");
+                String condition = response.getJSONObject("current").getJSONObject("condition").getString("text");
+                String conditionIcon = response.getJSONObject("current").getJSONObject("condition").getString("icon");
+                Picasso.get().load("http:".concat(conditionIcon)).into(binding.iconWeather);
+                binding.weatherCondition.setText(condition);
+                if (isDay == 1){
+                    //morning
+                    Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6WJYkhfC8Ef02XujVgVSjSH6g7sZhx7hKbQ&usqp=CAU").into(binding.backGround);
+                }else {
+                    //night
+                    Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3v_J2zb0iSh5yuOUYNByYc7XHCWExr5RX6g&usqp=CAU").into(binding.backGround);
                 }
+
+                JSONObject forecastObj = response.getJSONObject("forecast");
+                JSONObject forecast0 = forecastObj.getJSONArray("forecastday").getJSONObject(0);
+                JSONArray hourArray = forecast0.getJSONArray("hour");
+
+                for (int i = 0; i<hourArray.length(); i++){
+                    JSONObject hourObj = hourArray.getJSONObject(i);
+                    String time = hourObj.getString("time");
+                    String temperature = hourObj.getString("temp_c");
+                    String icon = hourObj.getJSONObject("condition").getString("icon");
+                    String windSpeed = hourObj.getString("wind_kph");
+                    weatherModelArrayList.add(new WeatherModel(time,temperature, icon, windSpeed));
+                }
+                weatherAdapter.notifyDataSetChanged();
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }, new Response.ErrorListener() {
             @Override

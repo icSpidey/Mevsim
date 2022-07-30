@@ -41,12 +41,12 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         WeatherModel model = weatherModelArrayList.get(position);
         holder.temperature.setText(model.getTemperature() + "°c");
         holder.windSpeed.setText(model.getWindSpeed() + "Km/h");
-        Picasso.get().load("http:".concat(model.getIcon())).into(holder.weatherCondition);
+        Picasso.get().load("http:".concat(model.getIcon())).into(holder.icon);
         SimpleDateFormat  input = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         SimpleDateFormat output = new SimpleDateFormat("hh:mm aa");
         try {
             Date date = input.parse(model.getTime());
-            holder.timeView.setText(output.format(date));
+            holder.time.setText(output.format(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -59,14 +59,14 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView windSpeed, temperature, timeView;
-        private ImageView weatherCondition;
+        private TextView windSpeed, temperature, time;
+        private ImageView icon;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             windSpeed = itemView.findViewById(R.id.windSpeed);
             temperature = itemView.findViewById(R.id.temperature);
-            timeView = itemView.findViewById(R.id.timeView);
-            weatherCondition = itemView.findViewById(R.id.weatherCondition);
+            time = itemView.findViewById(R.id.timeView);
+            icon = itemView.findViewById(R.id.weatherCondition);
         }
     }
 }
